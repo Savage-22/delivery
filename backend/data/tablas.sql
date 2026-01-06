@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS users (
+	id_user SERIAL PRIMARY KEY,
+	name_user VARCHAR(100) NOT NULL,
+	last_name_user VARCHAR(100) NOT NULL,
+	email_user VARCHAR(100) NOT NULL UNIQUE,
+	password_user VARCHAR(100) NOT NULL,
+	percentage SMALLINT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+);
+
+CREATE TABLE IF NOT EXISTS deliveries (
+	id_delivery SERIAL PRIMARY KEY NOT NULL,
+	id_user INTEGER NOT NULL,
+	local_name VARCHAR(100),
+	amount DECIMAL(5,2),
+	delivery_day DATE DEFAULT CURRENT_DATE,
+
+	CONSTRAINT fk_user FOREIGN KEY (id_user) REFERENCES users(id_user)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
