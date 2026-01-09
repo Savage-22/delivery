@@ -18,7 +18,7 @@ export const getAllUsers = async () => {
     return result.rows;
 };
 
-export const getUserById = async (id) => {
+export const getUser = async (id) => {
     const result = await pool.query(
         'SELECT id_user, name_user, last_name_user, email_user, percentage, created_at FROM users WHERE id_user = $1',
         [id]

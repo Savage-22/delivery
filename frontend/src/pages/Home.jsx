@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import FormInput from '../components/forms/FormInput';
 import FormSubmitButton from '../components/forms/FormSubmitButton';
+import { loginService, saveAuthData } from '../services/auth.service.js';
 
 export default function Home() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -12,6 +15,8 @@ export default function Home() {
         email: '',
         password: ''
     });
+
+    const [loginError, setLoginError] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -27,6 +32,7 @@ export default function Home() {
                 [name]: ''
             }));
         }
+        if (loginError) setLoginError('');
     };
 
     const validateForm = () => {
@@ -50,13 +56,23 @@ export default function Home() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoginError(''); // Limpiar errores globales
         
         if (validateForm()) {
-            console.log('Formulario válido:', formData);
-            // Aquí harías la llamada a tu API
-            // loginService(formData.email, formData.password)
+            try {
+                // Llamar al servicio de login
+                const data = await loginService(formData.email, formData.password);
+                console.log('Login exitoso:', data);
+                //redirigir al usuario o guardar el token, etc.
+                saveAuthData(data.token, data.user);
+                navigate('/dashboard');
+            } catch (error) {
+                console.error('Error durante el login:', error);
+                setLoginError(error);
+            }
+            
         }
     };
 

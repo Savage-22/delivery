@@ -44,6 +44,10 @@ export const getUserById = async (id) => {
     return user;
 };
 
+export const getUserByEmail = async (email) => {
+    return await userModel.getUserByEmail(email);
+};
+
 export const updateUser = async (id, userData) => {
     // Verificar que el usuario existe
     await getUserById(id);
